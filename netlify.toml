@@ -1,5 +1,5 @@
 [build]
-  Command = "yarn build && yarn build:lambda"
+  Command = "npm build && npm build:lambda"
   Functions = "lambda"
   Publish = "build"
 
