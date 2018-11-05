@@ -1,49 +1,78 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import styled, { createGlobalStyle } from "styled-components";
+import { PropagateLoader } from "react-spinners";
 
-class LambdaDemo extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { loading: false, msg: null };
+import processData from "./modules/processData";
+import List from "./components/List";
+import Heading from "./components/Heading";
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    font-family: sans-serif;
+    font-size: 16px;
+    color: #212121;
+    background-color: #fcfcfc;
   }
+`;
 
-  handleClick = e => {
-    e.preventDefault();
+const Container = styled.main`
+  display: flex;
+  justify-content: center;
+`;
 
-    this.setState({ loading: true });
-    fetch('/.netlify/functions/hello')
-      .then(response => response.json())
-      .then(json => this.setState({ loading: false, msg: json.msg }));
-  };
+const LoaderWrapper = styled.div`
+  height: 100vh;
+  display: flex;
+  align-items: center;
+`;
 
-  render() {
-    const { loading, msg } = this.state;
-
-    return (
-      <p>
-        <button onClick={this.handleClick}>
-          {loading ? 'Loading...' : 'Call Lambda'}
-        </button>
-        <br />
-        <span>{msg}</span>
-      </p>
-    );
-  }
-}
+const ContentWrapper = styled.div`
+  max-width: 500px;
+`;
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true,
+      datasets: []
+    };
+  }
+
+  componentDidMount() {
+    fetch("/.netlify/functions/results")
+      .then(data => data.json())
+      .then(datasets => {
+        let processedResults = processData(datasets.results);
+        let updated = datasets.updated;
+        return {
+          updated,
+          results: processedResults
+        };
+      })
+      .then(datasets => {
+        this.setState({ loading: false, datasets });
+      })
+      .catch(err => {
+        throw new Error(err);
+      });
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <LambdaDemo />
-        </header>
-      </div>
+      <Container>
+        {this.state.loading ? (
+          <LoaderWrapper>
+            <PropagateLoader color={"#212121"} loading={this.state.loading} />
+          </LoaderWrapper>
+        ) : (
+          <ContentWrapper>
+            <Heading updated={this.state.datasets.updated} />
+            <List data={this.state.datasets.results} />
+          </ContentWrapper>
+        )}
+        <GlobalStyle />
+      </Container>
     );
   }
 }

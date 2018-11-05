@@ -1,4 +1,7 @@
 [build]
-  Command = "yarn build"
+  Command = "yarn build && yarn build:lambda"
   Functions = "lambda"
   Publish = "build"
+
+[template.environment]
+  DB_URI = "MongoDB URI for caching results..."
