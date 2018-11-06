@@ -95,10 +95,18 @@ async function processRequest(dbClient) {
 exports.handler = async (event, context) => {
   try {
     let data = await processRequest(client);
-    let response = {
-      statusCode: 200,
-      body: JSON.stringify(data)
-    };
+    let response;
+    if (data.results) {
+      response = {
+        statusCode: 200,
+        body: JSON.stringify(data)
+      };
+    } else {
+      response = {
+        statusCode: 500,
+        body: "Internal server error - try again later..."
+      };
+    }
     return response;
   } catch (err) {
     console.log(err);
