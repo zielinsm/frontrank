@@ -2,6 +2,8 @@
 
 Basic front-end framework popularity rank. Live demo is available [here](frontrank.zielinsk.im)...
 
+![Desktop screenshot](https://github.com/zielinsm/frontrank/blob/master/screenshot-desktop.png?raw=true)
+
 ## General
   * React for the front-end
   * Netlify Functions as the back-end that fetches data from remote APIs, caches them in a remote MongoDB and returns to the client
