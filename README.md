@@ -1,6 +1,6 @@
 ### FrontRank
 
-Basic front-end framework popularity rank. Live demo is available [here](frontrank.zielinsk.im)...
+Basic front-end framework popularity rank.
 
 ![Desktop screenshot](https://github.com/zielinsm/frontrank/blob/master/screenshot-desktop.png?raw=true)
 
